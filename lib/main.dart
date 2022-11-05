@@ -1,10 +1,12 @@
 // @dart=2.9
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:url_launcher/url_launcher.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:ui';
+import 'socials.dart';
+import 'ui/styles.dart';
+import 'package:personal_portfolio/ui/theme.dart';
+import 'package:personal_portfolio/ui/switch.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const MyApp());
@@ -77,10 +79,6 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class _Portrait extends StatelessWidget {
-  const _Portrait({
-    Key key,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -109,30 +107,6 @@ class _Portrait extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class ToggleSwitch extends StatefulWidget {
-  const ToggleSwitch({Key key}) : super(key: key);
-
-  @override
-  State<ToggleSwitch> createState() => _ToggleSwitchState();
-}
-
-class _ToggleSwitchState extends State<ToggleSwitch> {
-  bool _value = false;
-  @override
-  Widget build(BuildContext context) {
-    final themeChange = Provider.of<DarkThemeProvider>(context);
-
-    return Switch(
-        value: _value,
-        onChanged: (_) {
-          setState(() {
-            _value = !_value;
-            themeChange.darkTheme = _value;
-          });
-        });
   }
 }
 
@@ -185,83 +159,5 @@ class _landscapeLayout extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-class Styles {
-  static ThemeData themeData(bool isDarkTheme, BuildContext context) {
-    return ThemeData(
-      primarySwatch: Colors.lightBlue,
-      primaryColor: isDarkTheme ? Color(0x121212FF) : Colors.white,
-      backgroundColor: isDarkTheme ? Colors.black : Color(0xffF1F5FB),
-      indicatorColor: isDarkTheme ? Color(0xff0E1D36) : Color(0xffCBDCF8),
-      hintColor: isDarkTheme ? Color(0xff280C0B) : Color(0xffEECED3),
-      highlightColor: isDarkTheme ? Color(0xff372901) : Color(0xffFCE192),
-      hoverColor: isDarkTheme ? Color(0xff3A3A3B) : Color(0xff4285F4),
-      focusColor: isDarkTheme ? Color(0xff0B2512) : Color(0xffA8DAB5),
-      disabledColor: Colors.grey,
-      cardColor: isDarkTheme ? Color(0xFF151515) : Colors.white,
-      canvasColor: isDarkTheme ? Colors.black : Colors.grey[50],
-      brightness: isDarkTheme ? Brightness.dark : Brightness.light,
-      buttonTheme: Theme.of(context).buttonTheme.copyWith(
-          colorScheme: isDarkTheme ? ColorScheme.dark() : ColorScheme.light()),
-      appBarTheme: AppBarTheme(
-        elevation: 0.0,
-      ),
-      textSelectionTheme: TextSelectionThemeData(
-          selectionColor: isDarkTheme ? Colors.white : Colors.black),
-    );
-  }
-}
-
-class SocialMedia extends StatelessWidget {
-  const SocialMedia(this.imageUrl, this.url);
-  final String imageUrl;
-  final Uri url;
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Image.asset(
-        imageUrl,
-        width: 24,
-        height: 24,
-      ),
-      onTap: () {
-        _launchUrl(url);
-      },
-    );
-  }
-}
-
-class DarkThemePreference {
-  static const THEME_STATUS = "THEMESTATUS";
-
-  setDarkTheme(bool value) async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setBool(THEME_STATUS, value);
-  }
-
-  Future<bool> getTheme() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    return prefs.getBool(THEME_STATUS) ?? false;
-  }
-}
-
-class DarkThemeProvider with ChangeNotifier {
-  DarkThemePreference darkThemePreference = DarkThemePreference();
-  bool _darkTheme = false;
-
-  bool get darkTheme => _darkTheme;
-
-  set darkTheme(bool value) {
-    _darkTheme = value;
-    darkThemePreference.setDarkTheme(value);
-    notifyListeners();
-  }
-}
-
-Future<void> _launchUrl(url) async {
-  if (!await launchUrl(url)) {
-    throw 'Could not launch $url';
   }
 }
