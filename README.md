@@ -1,5 +1,7 @@
 # App name
 personal_portfolio
+# App link
+https://appetize.io/app/f3aq2idg7nx4pchjx37v4764om?device=pixel4&osVersion=11.0&scale=75
 # Description
  My name is faruk Abdulganiyu and this is my personal resume  app designed as a task for hngi9.
  It is a responsive app with automatic and manual dark mode feature. It also contains links to my socials.
